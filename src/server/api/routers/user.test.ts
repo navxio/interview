@@ -58,7 +58,7 @@ describe('userRouter.getUsers', () => {
 
     await caller.user.getUsers({ filterByGender: 'female' });
 
-    expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/users/filter?key=gender&value=female');
+    expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/users/filter?key=gender&value=female&limit=0');
   });
 
   // Sorting

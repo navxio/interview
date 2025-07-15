@@ -41,7 +41,7 @@ export const userRouter = createTRPCRouter({
       if (input.searchQuery) {
         url = `https://dummyjson.com/users/search?q=${input.searchQuery}`;
       } else if (input.filterByGender) {
-        url = `https://dummyjson.com/users/filter?key=gender&value=${input.filterByGender}`;
+        url = `https://dummyjson.com/users/filter?key=gender&value=${input.filterByGender}&limit=0`;
       }
 
       // 2. Fetch data and validate its shape
