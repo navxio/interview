@@ -23,27 +23,37 @@ vi.mock('../_hooks/useDebounce', () => ({
 const useQueryMock = vi.mocked(api.user.getUsers.useQuery);
 
 describe('<AddressBook />', () => {
+
+  // default, empty data object
+
+  const mockInitialData = {
+    users: [],
+    total: 0,
+    skip: 0,
+    limit: 0
+  }
+
   it('should render loading, error, and success states correctly', () => {
     // Test loading state
     useQueryMock.mockReturnValue({ isLoading: true, isError: false, data: undefined });
-    const { rerender } = render(<AddressBook />);
+    const { rerender } = render(<AddressBook initialData={mockInitialData} />);
     expect(screen.getByText(/loading users.../i)).toBeInTheDocument();
 
     // Test error state
     useQueryMock.mockReturnValue({ isLoading: false, isError: true, data: undefined });
-    rerender(<AddressBook />);
+    rerender(<AddressBook initialData={mockInitialData} />);
     expect(screen.getByText(/failed to load users/i)).toBeInTheDocument();
 
     // Test success state
-    const mockData = { users: [{ id: 1, firstName: 'John', lastName: 'Doe', email: 'john@doe.com', age: 30, gender: 'male', image: 'https://robohash.org/John.png' }], total: 1, skip: 0, limit: 1 };
-    useQueryMock.mockReturnValue({ isLoading: false, isError: false, data: mockData });
-    rerender(<AddressBook />);
+    const successData = { users: [{ id: 1, firstName: 'John', lastName: 'Doe', email: 'john@doe.com', age: 30, gender: 'male', image: 'https://robohash.org/John.png' }], total: 1, skip: 0, limit: 1 };
+    useQueryMock.mockReturnValue({ isLoading: false, isError: false, data: successData });
+    rerender(<AddressBook initialData={successData} />);
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
   it('should call useQuery with correct search and sort parameters', async () => {
     useQueryMock.mockReturnValue({ isLoading: false, isError: false, data: { users: [] } });
-    render(<AddressBook />);
+    render(<AddressBook initialData={mockInitialData} />);
 
     // Use expect.objectContaining to only check the properties we care about(looser than direct object comparison)
     expect(useQueryMock).toHaveBeenCalledWith(

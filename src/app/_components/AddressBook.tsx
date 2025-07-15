@@ -9,6 +9,11 @@ import type { AppRouter } from '~/server/api/root';
 // Infer the user type from the API output for type safety
 type User = inferRouterOutputs<AppRouter>['user']['getUsers']['users'][number];
 
+// init AddressBook props
+type AddressBookProps = {
+  initialData: inferRouterOutputs<AppRouter>['user']['getUsers']
+}
+
 // A simple, visually clean card for displaying a single user
 function UserCard({ user }: { user: User }) {
   return (
@@ -23,7 +28,7 @@ function UserCard({ user }: { user: User }) {
   );
 }
 
-export default function AddressBook() {
+export default function AddressBook({ initialData }: AddressBookProps) {
   // --- State Management ---
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'age' | 'email'>('name');
@@ -32,6 +37,9 @@ export default function AddressBook() {
   // Apply debounce to the search term to prevent excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
+  // define a variable to check if component is rendered initially
+  const isInitialQuery = !debouncedSearchTerm && !filterGender && sortBy === 'name';
+
   // --- Data Fetching ---
   const { data, isLoading, isError } = api.user.getUsers.useQuery({
     searchQuery: debouncedSearchTerm,
@@ -39,6 +47,7 @@ export default function AddressBook() {
     filterByGender: filterGender,
   }, {
     // Keep previous data visible while new data is loading for a smoother UX
+    initialData: isInitialQuery ? initialData : undefined,
     placeholderData: (previousData) => previousData,
   });
 
