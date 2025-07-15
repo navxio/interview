@@ -16,9 +16,10 @@ describe('userRouter.getUsers', () => {
   });
 
   const mockUsers = [
-    { id: 1, firstName: 'Terry', lastName: 'Medhurst', email: 'atuny0@sohu.com', age: 50, gender: 'male', image: 'url1' },
-    { id: 2, firstName: 'Sheldon', lastName: 'Quigley', email: 'hbingley1@plala.or.jp', age: 28, gender: 'male', image: 'url2' },
-    { id: 3, firstName: 'Clementine', lastName: 'Bauch', email: 'clementine@bauch.com', age: 40, gender: 'female', image: 'url3' },
+    // Use valid placeholder URLs for the image property
+    { id: 1, firstName: 'Terry', lastName: 'Medhurst', email: 'atuny0@sohu.com', age: 50, gender: 'male', image: 'https://robohash.org/Terry.png' },
+    { id: 2, firstName: 'Sheldon', lastName: 'Quigley', email: 'hbingley1@plala.or.jp', age: 28, gender: 'male', image: 'https://robohash.org/Sheldon.png' },
+    { id: 3, firstName: 'Clementine', lastName: 'Bauch', email: 'clementine@bauch.com', age: 40, gender: 'female', image: 'https://robohash.org/Clementine.png' },
   ];
 
   const mockApiResponse = { users: mockUsers, total: 3, skip: 0, limit: 3 };
