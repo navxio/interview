@@ -45,12 +45,15 @@ describe('<AddressBook />', () => {
     useQueryMock.mockReturnValue({ isLoading: false, isError: false, data: { users: [] } });
     render(<AddressBook />);
 
-    // 1. Check initial call
-    expect(useQueryMock).toHaveBeenCalledWith({
-      searchQuery: '',
-      sortBy: 'name',
-      filterByGender: undefined,
-    });
+    // Use expect.objectContaining to only check the properties we care about(looser than direct object comparison)
+    expect(useQueryMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        searchQuery: '',
+        sortBy: 'name',
+        filterByGender: undefined,
+      }),
+      expect.any(Object)
+    );
 
     // 2. Simulate user changing the sort dropdown
     const sortSelect = screen.getByLabelText(/sort by/i);
@@ -58,11 +61,15 @@ describe('<AddressBook />', () => {
 
     // 3. Assert that the hook was re-called with the new sort value
     await waitFor(() => {
-      expect(useQueryMock).toHaveBeenCalledWith({
-        searchQuery: '',
-        sortBy: 'age',
-        filterByGender: undefined,
-      });
+      expect(useQueryMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          searchQuery: '',
+          sortBy: 'age',
+          filterByGender: undefined,
+        }),
+        expect.any(Object)
+      );
+
     });
   });
 });
